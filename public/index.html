@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rack Coach - APA Coaching App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <h1>🎱 Rack Coach</h1>
+            </div>
+            <div class="navbar-menu">
+                <button id="navTeams" class="nav-btn active" data-section="teams">Teams</button>
+                <button id="navPlayers" class="nav-btn" data-section="players">Players</button>
+                <button id="navMatches" class="nav-btn" data-section="matches">Matches</button>
+                <button id="navStats" class="nav-btn" data-section="stats">Stats</button>
+                <button id="navSettings" class="nav-btn" data-section="settings">⚙️</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container">
+            <!-- Teams Section -->
+            <section id="teams-section" class="section active">
+                <div class="section-header">
+                    <h2>Team Management</h2>
+                    <button class="btn btn-primary" id="newTeamBtn">+ New Team</button>
+                </div>
+                <div id="teams-list" class="teams-grid"></div>
+            </section>
+
+            <!-- Players Section -->
+            <section id="players-section" class="section">
+                <div class="section-header">
+                    <select id="teamSelect" class="select-team"></select>
+                    <button class="btn btn-primary" id="newPlayerBtn">+ Add Player</button>
+                </div>
+                <div id="players-list" class="players-grid"></div>
+            </section>
+
+            <!-- Matches Section -->
+            <section id="matches-section" class="section">
+                <div class="section-header">
+                    <select id="matchTeamSelect" class="select-team"></select>
+                    <button class="btn btn-primary" id="newMatchBtn">+ New Match</button>
+                </div>
+                <div id="matches-list" class="matches-list"></div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="stats-section" class="section">
+                <div class="section-header">
+                    <select id="statsTeamSelect" class="select-team"></select>
+                </div>
+                <div id="stats-content" class="stats-grid"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="section">
+                <div class="section-header">
+                    <h2>Settings & Data Management</h2>
+                </div>
+                <div class="settings-panel">
+                    <div class="setting-group">
+                        <h3>Backup & Export</h3>
+                        <button class="btn btn-secondary" id="exportBtn">📥 Export Team Data</button>
+                        <button class="btn btn-secondary" id="importBtn">📤 Import Backup</button>
+                        <input type="file" id="importFile" accept=".json" style="display:none;">
+                    </div>
+                    <div class="setting-group">
+                        <h3>About</h3>
+                        <p>Rack Coach v1.0</p>
+                        <p>Offline-first coaching application for APA captains</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- New/Edit Team Modal -->
+    <div id="teamModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="teamModalTitle">New Team</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="teamForm">
+                    <div class="form-group">
+                        <label for="teamName">Team Name</label>
+                        <input type="text" id="teamName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="captainName">Captain Name</label>
+                        <input type="text" id="captainName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="captainContact">Captain Contact</label>
+                        <input type="text" id="captainContact">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Team</button>
+                        <button type="button" class="btn btn-secondary" id="teamModalClose">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New/Edit Player Modal -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="playerModalTitle">Add Player</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="playerForm">
+                    <div class="form-group">
+                        <label for="playerName">Player Name</label>
+                        <input type="text" id="playerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillLevel">APA Skill Level (1-7)</label>
+                        <select id="skillLevel" required>
+                            <option value="">Select Level</option>
+                            <option value="1">1 - Beginner</option>
+                            <option value="2">2 - Novice</option>
+                            <option value="3">3 - Intermediate</option>
+                            <option value="4">4 - Intermediate+</option>
+                            <option value="5">5 - Advanced</option>
+                            <option value="6">6 - Advanced+</option>
+                            <option value="7">7 - Expert</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="playerStatus">Status</label>
+                        <select id="playerStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="playerContact">Contact Info</label>
+                        <input type="text" id="playerContact">
+                    </div>
+                    <div class="form-group">
+                        <label for="coachingNotes">Coaching Notes</label>
+                        <textarea id="coachingNotes" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="strengths">Strengths</label>
+                        <textarea id="strengths" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="weaknesses">Weaknesses</label>
+                        <textarea id="weaknesses" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Player</button>
+                        <button type="button" class="btn btn-secondary" id="playerModalClose">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New/Edit Match Modal -->
+    <div id="matchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="matchModalTitle">New Match</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="matchForm">
+                    <div class="form-group">
+                        <label for="matchDate">Date</label>
+                        <input type="datetime-local" id="matchDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opponent">Opponent Team</label>
+                        <input type="text" id="opponent" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="format">Match Format</label>
+                        <select id="format">
+                            <option value="9-ball">9-Ball</option>
+                            <option value="8-ball">8-Ball</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Match</button>
+                        <button type="button" class="btn btn-secondary" id="matchModalClose">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Detail Modal -->
+    <div id="matchDetailModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="matchDetailTitle">Match Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="matchDetailContent"></div>
+                <div class="match-tabs">
+                    <button class="tab-btn active" data-tab="lineup">Lineup</button>
+                    <button class="tab-btn" data-tab="scoring">Scoring</button>
+                    <button class="tab-btn" data-tab="notes">Notes</button>
+                </div>
+                <div id="lineup-tab" class="tab-content active">
+                    <div class="lineup-builder">
+                        <h3>23-Rule Calculator & Lineup Builder</h3>
+                        <div id="lineupForm"></div>
+                    </div>
+                </div>
+                <div id="scoring-tab" class="tab-content">
+                    <div class="scoring-tracker">
+                        <h3>Match Scoring</h3>
+                        <div id="scoringForm"></div>
+                    </div>
+                </div>
+                <div id="notes-tab" class="tab-content">
+                    <textarea id="matchNotes" rows="6" placeholder="Match notes, defensive shots, timeouts..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" id="saveMatchBtn">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" id="matchDetailClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
