@@ -1,0 +1,11 @@
+{
+  "name": "Rack Coach",
+  "short_name": "Rack Coach",
+  "description": "Offline-first APA pool captain coaching assistant",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": []
+}
